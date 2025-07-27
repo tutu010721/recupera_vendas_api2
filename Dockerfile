@@ -18,20 +18,22 @@ FROM php:8.2-fpm-alpine
 ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
-# === VERSÃO DETETIVE: INSTALANDO UMA COISA DE CADA VEZ ===
-
-# Passo A: Instala os pacotes do sistema (sabemos que esta parte funciona)
-RUN apk update && apk add --no-cache build-base libxml2-dev postgresql-dev libzip-dev
-
-# Passo B: Instala as extensões do PHP, UMA POR UMA, para encontrar a culpada
-RUN docker-php-ext-install bcmath
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install pdo_pgsql
-RUN docker-php-ext-install xml
-RUN docker-php-ext-configure zip # Configuração especial para a extensão zip
-RUN docker-php-ext-install zip
-
-# =============================================================
+# Instala pacotes do sistema, ferramentas de compilação e extensões do PHP
+# === VERSÃO FINAL COM TODAS AS CORREÇÕES ===
+RUN apk update && apk add --no-cache \
+    build-base \
+    oniguruma-dev \ # <-- A SOLUÇÃO: Dependência para a extensão mbstring
+    libxml2-dev \
+    postgresql-dev \
+    libzip-dev \
+# Configura e instala as extensões do PHP de uma vez
+&& docker-php-ext-configure zip \
+&& docker-php-ext-install \
+    bcmath \
+    mbstring \
+    pdo_pgsql \
+    xml \
+    zip
 
 # Define o diretório de trabalho
 WORKDIR /var/www
