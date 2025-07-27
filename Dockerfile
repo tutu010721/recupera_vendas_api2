@@ -18,14 +18,17 @@ FROM php:8.2-fpm-alpine
 ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
-# Instala pacotes do sistema e extensões PHP necessárias para o Laravel
-# === VERSÃO DE DEBUG: Comandos separados para isolar o erro ===
-RUN apk update
-RUN apk add --no-cache \
+# Instala pacotes do sistema, ferramentas de compilação e extensões do PHP
+# === VERSÃO FINAL E CORRIGIDA ===
+RUN apk update && apk add --no-cache \
+    build-base \ # Ferramentas essenciais para compilação
     libxml2-dev \
     postgresql-dev \
-    libzip-dev
-RUN docker-php-ext-install \
+    libzip-dev \
+# Configura a extensão zip antes de instalar
+&& docker-php-ext-configure zip \
+# Instala as extensões do PHP
+&& docker-php-ext-install \
     bcmath \
     mbstring \
     pdo_pgsql \
