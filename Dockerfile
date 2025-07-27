@@ -19,7 +19,8 @@ ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
 # Instala pacotes do sistema e extensões PHP necessárias para o Laravel
-RUN apk add --no-cache \
+# === LINHA CORRIGIDA ABAIXO ===
+RUN apk update && apk add --no-cache \
     oniguruma-dev \
     libxml2-dev \
     postgresql-dev \
