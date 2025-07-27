@@ -19,12 +19,13 @@ ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
 # Instala pacotes do sistema e extensões PHP necessárias para o Laravel
-# === VERSÃO SIMPLIFICADA E CORRIGIDA DA LINHA ABAIXO ===
-RUN apk update && apk add --no-cache \
+# === VERSÃO DE DEBUG: Comandos separados para isolar o erro ===
+RUN apk update
+RUN apk add --no-cache \
     libxml2-dev \
     postgresql-dev \
-    libzip-dev \
-    && docker-php-ext-install \
+    libzip-dev
+RUN docker-php-ext-install \
     bcmath \
     mbstring \
     pdo_pgsql \
