@@ -18,22 +18,8 @@ FROM php:8.2-fpm-alpine
 ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
-# Instala pacotes do sistema, ferramentas de compilação e extensões do PHP
-# === VERSÃO FINAL COM TODAS AS CORREÇÕES ===
-RUN apk update && apk add --no-cache \
-    build-base \
-    oniguruma-dev \ # <-- A SOLUÇÃO: Dependência para a extensão mbstring
-    libxml2-dev \
-    postgresql-dev \
-    libzip-dev \
-# Configura e instala as extensões do PHP de uma vez
-&& docker-php-ext-configure zip \
-&& docker-php-ext-install \
-    bcmath \
-    mbstring \
-    pdo_pgsql \
-    xml \
-    zip
+# Instala pacotes e extensões em um único comando para evitar erros de cópia
+RUN apk update && apk add --no-cache build-base oniguruma-dev libxml2-dev postgresql-dev libzip-dev && docker-php-ext-configure zip && docker-php-ext-install bcmath mbstring pdo_pgsql xml zip
 
 # Define o diretório de trabalho
 WORKDIR /var/www
