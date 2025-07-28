@@ -17,3 +17,11 @@ Route::get('/user', function (Request $request) {
 // === NOSSAS ROTAS DE WEBHOOK ATUALIZADAS ===
 // Aponta tanto GET (para validação) quanto POST (para dados) para o mesmo lugar
 Route::match(['get', 'post'], '/webhook/{platform}/{key}', [WebhookController::class, 'handle']);
+
+//... (as rotas que já existem ficam aqui)
+
+// === ROTA DE TESTE SIMPLES PARA A ADOOREI ===
+Route::get('/teste-simples', function () {
+    return response('OK', 200)
+          ->header('Content-Type', 'text/plain');
+});
