@@ -18,6 +18,10 @@ FROM php:8.2-fpm-alpine
 ARG APP_USER=www-data
 ARG APP_GROUP=www-data
 
+# === A CORREÇÃO ESTÁ AQUI ===
+# Copia o executável do Composer do primeiro estágio para a imagem final
+COPY --from=vendor /usr/bin/composer /usr/bin/composer
+
 # Instala pacotes e extensões em um único comando para evitar erros de cópia
 RUN apk update && apk add --no-cache build-base oniguruma-dev libxml2-dev postgresql-dev libzip-dev && docker-php-ext-configure zip && docker-php-ext-install bcmath mbstring pdo_pgsql xml zip
 
